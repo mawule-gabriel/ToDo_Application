@@ -34,14 +34,20 @@ public class Todo {
     }
 
     public static void main(String[] args) throws Exception {
-        // Create HTTP server listening on port 8080
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/", new TodoHandler()); // Serve at root path
-        server.createContext("/toggle", new ToggleTaskHandler()); // Handle task toggling
-        server.createContext("/delete", new DeleteTaskHandler()); // Handle task deletion
-        server.setExecutor(null); // Use default executor
+        // Use port 5000 as default or use the PORT environment variable
+        String port = System.getenv("PORT");
+        int serverPort = (port != null && !port.isEmpty()) ? Integer.parseInt(port) : 5000;
+
+        // Create HTTP server listening on the specified port
+        HttpServer server = HttpServer.create(new InetSocketAddress(serverPort), 0);
+        server.createContext("/", new TodoHandler());
+        // Handle task toggling
+        server.createContext("/toggle", new ToggleTaskHandler());
+        // Handle task deletion
+        server.createContext("/delete", new DeleteTaskHandler());
+        server.setExecutor(null);
         server.start();
-        System.out.println("Server started at http://localhost:8080/");
+        System.out.println("Server started at http://localhost:" + serverPort + "/");
     }
 
     // Parse URL encoded parameters
@@ -233,25 +239,6 @@ public class Todo {
 
             html.append("</ul>");
             html.append("</div>");
-
-            // Simple JavaScript for better UX
-            html.append("<script>");
-            html.append("document.addEventListener('DOMContentLoaded', () => {");
-            html.append("  const form = document.querySelector('form');");
-            html.append("  const input = document.querySelector('input[name=\"task\"]');");
-            html.append("  form.addEventListener('submit', () => {");
-            html.append("    if (input.value.trim()) {");
-            html.append("      const newItem = document.createElement('li');");
-            html.append("      newItem.classList.add('task-item');");
-            html.append("      newItem.innerHTML = `<span class=\"task-content\">${input.value}</span><div class=\"task-actions\">Processing...</div>`;");
-            html.append("      document.querySelector('.task-list').appendChild(newItem);");
-            html.append("    }");
-            html.append("  });");
-            html.append("});");
-            html.append("</script>");
-
-            html.append("</body>");
-            html.append("</html>");
 
             // Respond with the HTML content
             exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
