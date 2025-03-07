@@ -162,7 +162,7 @@ public class Todo {
             html.append("<head>");
             html.append("<meta charset='UTF-8'>");
             html.append("<meta name='viewport' content='width=device-width, initial-scale=1.0'>");
-            html.append("<title>My To-Do List</title>");
+            html.append("<title>MY AWS LAB</title>");
             html.append("<style>");
             html.append("* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }");
             html.append("body { background-color: #f5f7fa; color: #333; line-height: 1.6; padding: 20px; }");
